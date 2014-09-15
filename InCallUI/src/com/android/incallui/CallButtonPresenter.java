@@ -65,6 +65,10 @@ public class CallButtonPresenter extends Presenter<CallButtonPresenter.CallButto
     private boolean mAutomaticallyMuted = false;
     private boolean mPreviousMuteState = false;
 
+    // NOTE: Capability constant definition has been duplicated to avoid bundling
+    // the Dialer with Frameworks.
+    private static final int CAPABILITY_ADD_PARTICIPANT = 0x02000000;
+
     public CallButtonPresenter() {
     }
 
@@ -252,6 +256,10 @@ public class CallButtonPresenter extends Presenter<CallButtonPresenter.CallButto
         TelecomAdapter.getInstance().merge(mCall.getId());
     }
 
+    public void addParticipantClicked() {
+        InCallPresenter.getInstance().sendAddParticipantIntent();
+    }
+
     public void addCallClicked() {
         // Automatically mute the current call
         mAutomaticallyMuted = true;
@@ -422,6 +430,7 @@ public class CallButtonPresenter extends Presenter<CallButtonPresenter.CallButto
         final boolean showDowngradeToAudio = isVideo && isDowngradeToAudioSupported(call);
         final boolean showMute = call.can(android.telecom.Call.Details.CAPABILITY_MUTE);
         int callTransferCapabilities = call.getTransferCapabilities();
+        final boolean showAddParticipant = call.can(CAPABILITY_ADD_PARTICIPANT);
 
         ui.showButton(BUTTON_AUDIO, true);
         ui.showButton(BUTTON_SWAP, showSwap);
@@ -439,6 +448,7 @@ public class CallButtonPresenter extends Presenter<CallButtonPresenter.CallButto
         }
         ui.showButton(BUTTON_DIALPAD, true);
         ui.showButton(BUTTON_MERGE, showMerge);
+        ui.enableAddParticipant(showAddParticipant);
 
         /* Depending on the transfer capabilities, display the corresponding buttons */
         if ((callTransferCapabilities & QtiImsExtUtils.QTI_IMS_CONSULTATIVE_TRANSFER) != 0) {
@@ -514,6 +524,7 @@ public class CallButtonPresenter extends Presenter<CallButtonPresenter.CallButto
         void setHold(boolean on);
         void setCameraSwitched(boolean isBackFacingCamera);
         void setVideoPaused(boolean isPaused);
+        void enableAddParticipant(boolean show);
         void setAudio(int mode);
         void setSupportedAudio(int mask);
         void displayDialpad(boolean on, boolean animate);

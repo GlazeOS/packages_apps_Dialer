@@ -49,6 +49,8 @@ public class NotificationBroadcastReceiver extends BroadcastReceiver {
             "com.android.incallui.ACTION_PULL_EXTERNAL_CALL";
     public static final String EXTRA_NOTIFICATION_ID =
             "com.android.incallui.extra.EXTRA_NOTIFICATION_ID";
+    public static final String ADD_CALL_MODE_KEY = "add_call_mode";
+    public static final String ADD_PARTICIPANT_KEY = "add_participant";
 
     @Override
     public void onReceive(Context context, Intent intent) {

@@ -116,6 +116,7 @@ public class CallButtonFragment
     private ImageButton mBlindTransferButton;
     private ImageButton mAssuredTransferButton;
     private ImageButton mConsultativeTransferButton;
+    private ImageButton mAddParticipantButton;
 
     private PopupMenu mAudioModePopup;
     private boolean mAudioModePopupVisible;
@@ -185,6 +186,8 @@ public class CallButtonFragment
         mAssuredTransferButton.setOnClickListener(this);
         mConsultativeTransferButton = (ImageButton) parent.findViewById(R.id.consultativeTransfer);
         mConsultativeTransferButton.setOnClickListener(this);
+        mAddParticipantButton = (ImageButton) parent.findViewById(R.id.addParticipant);
+        mAddParticipantButton.setOnClickListener(this);
         mOverflowButton = (ImageButton) parent.findViewById(R.id.overflowButton);
         mOverflowButton.setOnClickListener(this);
         mManageVideoCallConferenceButton = (ImageButton) parent.findViewById(
@@ -231,6 +234,8 @@ public class CallButtonFragment
             getPresenter().swapClicked();
         } else if (id == R.id.dialpadButton) {
             getPresenter().showDialpadClicked(!mShowDialpadButton.isSelected());
+        } else if (id == R.id.addParticipant) {
+            getPresenter().addParticipantClicked();
         } else if (id == R.id.changeToVideoButton) {
             getPresenter().changeToVideoClicked();
         } else if (id == R.id.changeToVoiceButton) {
@@ -391,6 +396,7 @@ public class CallButtonFragment
         mConsultativeTransferButton.setEnabled(isEnabled);
         mOverflowButton.setEnabled(isEnabled);
         mManageVideoCallConferenceButton.setEnabled(isEnabled);
+        mAddParticipantButton.setEnabled(isEnabled);
     }
 
     @Override
@@ -467,6 +473,10 @@ public class CallButtonFragment
         } else {
             mPauseVideoButton.setContentDescription(getText(R.string.onscreenTurnOffCameraText));
         }
+    }
+
+    public void enableAddParticipant(boolean show) {
+        mAddParticipantButton.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
     @Override
