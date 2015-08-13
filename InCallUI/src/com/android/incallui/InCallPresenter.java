@@ -347,6 +347,7 @@ public class InCallPresenter implements CallList.Listener,
         mCallList.addListener(this);
 
         InCallCsRedialHandler.getInstance().setUp(mContext);
+        InCallUiStateNotifier.getInstance().setUp(mContext);
         VideoPauseController.getInstance().setUp(this);
         InCallVideoCallCallbackNotifier.getInstance().addSessionModificationListener(this);
 
@@ -379,8 +380,8 @@ public class InCallPresenter implements CallList.Listener,
 
         mTelephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_NONE);
         VideoPauseController.getInstance().tearDown();
+        InCallUiStateNotifier.getInstance().tearDown();
         InCallVideoCallCallbackNotifier.getInstance().removeSessionModificationListener(this);
-
         InCallMessageController.getInstance().tearDown();
         removeDetailsListener(CallSubstateNotifier.getInstance());
 
@@ -1110,7 +1111,7 @@ public class InCallPresenter implements CallList.Listener,
     /*package*/
     void onActivityStarted() {
         Log.d(this, "onActivityStarted");
-        notifyVideoPauseController(true);
+        notifyInCallUiStateNotifier(true);
         if (mStatusBarNotifier != null) {
             mStatusBarNotifier.updateCallStatusBar(mCallList);
         }
@@ -1119,17 +1120,17 @@ public class InCallPresenter implements CallList.Listener,
     /*package*/
     void onActivityStopped() {
         Log.d(this, "onActivityStopped");
-        notifyVideoPauseController(false);
+        notifyInCallUiStateNotifier(false);
         if (mStatusBarNotifier != null ) {
             mStatusBarNotifier.updateCallStatusBar(mCallList);
         }
     }
 
-    private void notifyVideoPauseController(boolean showing) {
-        Log.d(this, "notifyVideoPauseController: mIsChangingConfigurations=" +
+    private void notifyInCallUiStateNotifier(boolean showing) {
+        Log.d(this, "notifyInCallUiStateNotifier: mIsChangingConfigurations=" +
                 mIsChangingConfigurations);
         if (!mIsChangingConfigurations) {
-            VideoPauseController.getInstance().onUiShowing(showing);
+            InCallUiStateNotifier.getInstance().onUiShowing(showing);
         }
     }
 
