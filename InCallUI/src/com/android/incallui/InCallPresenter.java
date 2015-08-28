@@ -949,6 +949,7 @@ public class InCallPresenter implements CallList.Listener,
             if (VideoUtils.isVideoCall(videoState)) {
                 showInCall(false, false/* newOutgoingCall */);
             }
+            InCallAudioManager.getInstance().onAnswerIncomingCall(call, videoState);
         }
     }
 
@@ -996,6 +997,7 @@ public class InCallPresenter implements CallList.Listener,
             VideoProfile videoProfile = new VideoProfile(videoState);
             call.getVideoCall().sendSessionModifyResponse(videoProfile);
             call.setSessionModificationState(Call.SessionModificationState.NO_REQUEST);
+            InCallAudioManager.getInstance().onAcceptUpgradeRequest(call, videoState);
         }
     }
 
