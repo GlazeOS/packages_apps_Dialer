@@ -346,6 +346,7 @@ public class InCallPresenter implements CallList.Listener,
         // will kick off an update and the whole process can start.
         mCallList.addListener(this);
 
+        InCallCsRedialHandler.getInstance().setUp(mContext);
         VideoPauseController.getInstance().setUp(this);
         InCallVideoCallCallbackNotifier.getInstance().addSessionModificationListener(this);
 
@@ -1571,6 +1572,8 @@ public class InCallPresenter implements CallList.Listener,
                 mExternalCallList.removeExternalCallListener(mExternalCallNotifier);
             }
             mStatusBarNotifier = null;
+
+            InCallCsRedialHandler.getInstance().tearDown();
 
             if (mCallList != null) {
                 mCallList.removeListener(this);
