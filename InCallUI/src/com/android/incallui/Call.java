@@ -861,7 +861,9 @@ public class Call {
      * repeated calls to isEmergencyNumber.
      */
     private void updateEmergencyCallState() {
-        mIsEmergencyCall = TelecomCallUtil.isEmergencyCall(mTelecomCall);
+        Uri handle = mTelecomCall.getDetails().getHandle();
+        mIsEmergencyCall = QtiCallUtils.isEmergencyNumber
+                (handle == null ? "" : handle.getSchemeSpecificPart());
     }
 
     /**
