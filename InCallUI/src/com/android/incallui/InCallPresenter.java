@@ -356,6 +356,7 @@ public class InCallPresenter implements CallList.Listener,
         InCallCsRedialHandler.getInstance().setUp(mContext);
         InCallUiStateNotifier.getInstance().setUp(mContext);
         VideoPauseController.getInstance().setUp(this);
+        InCallLowBatteryListener.getInstance().setUp(mContext);
         InCallVideoCallCallbackNotifier.getInstance().addSessionModificationListener(this);
 
         mFilteredQueryHandler = new FilteredNumberAsyncQueryHandler(context.getContentResolver());
@@ -390,6 +391,7 @@ public class InCallPresenter implements CallList.Listener,
         mTelephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_NONE);
         VideoPauseController.getInstance().tearDown();
         InCallUiStateNotifier.getInstance().tearDown();
+        InCallLowBatteryListener.getInstance().tearDown();
         InCallVideoCallCallbackNotifier.getInstance().removeSessionModificationListener(this);
         InCallMessageController.getInstance().tearDown();
         OrientationModeHandler.getInstance().tearDown();
@@ -972,12 +974,14 @@ public class InCallPresenter implements CallList.Listener,
         }
 
         Call call = mCallList.getIncomingCall();
-        if (call != null) {
+        if (call != null && !InCallLowBatteryListener.getInstance().
+                onAnswerIncomingCall(call, videoState)) {
             TelecomAdapter.getInstance().answerCall(call.getId(), videoState);
-            if (VideoUtils.isVideoCall(videoState)) {
-                showInCall(false, false/* newOutgoingCall */);
-            }
             InCallAudioManager.getInstance().onAnswerIncomingCall(call, videoState);
+        }
+
+        if (call != null && VideoUtils.isVideoCall(videoState)) {
+            showInCall(false, false/* newOutgoingCall */);
         }
     }
 
