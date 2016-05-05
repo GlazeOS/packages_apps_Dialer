@@ -669,6 +669,10 @@ public class Call {
         }
     }
 
+    public int getTrueState(){
+        return mState;
+    }
+
     public void setState(int state) {
         mState = state;
         if (mState == State.INCOMING) {
