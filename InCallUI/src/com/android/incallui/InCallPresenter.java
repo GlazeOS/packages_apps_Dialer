@@ -353,6 +353,9 @@ public class InCallPresenter implements CallList.Listener,
         mTelephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
         mCallList.setFilteredNumberQueryHandler(mFilteredQueryHandler);
 
+        InCallMessageController.getInstance().setUp(mContext);
+        addDetailsListener(CallSubstateNotifier.getInstance());
+
         Log.d(this, "Finished InCallPresenter.setUp");
     }
 
@@ -374,6 +377,9 @@ public class InCallPresenter implements CallList.Listener,
         mTelephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_NONE);
         VideoPauseController.getInstance().tearDown();
         InCallVideoCallCallbackNotifier.getInstance().removeSessionModificationListener(this);
+
+        InCallMessageController.getInstance().tearDown();
+        removeDetailsListener(CallSubstateNotifier.getInstance());
     }
 
     private void attemptFinishActivity() {
