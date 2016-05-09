@@ -28,6 +28,9 @@ import static com.android.incallui.CallButtonFragment.Buttons.BUTTON_MUTE;
 import static com.android.incallui.CallButtonFragment.Buttons.BUTTON_PAUSE_VIDEO;
 import static com.android.incallui.CallButtonFragment.Buttons.BUTTON_SWAP;
 import static com.android.incallui.CallButtonFragment.Buttons.BUTTON_SWITCH_CAMERA;
+import static com.android.incallui.CallButtonFragment.Buttons.BUTTON_TRANSFER_ASSURED;
+import static com.android.incallui.CallButtonFragment.Buttons.BUTTON_TRANSFER_BLIND;
+import static com.android.incallui.CallButtonFragment.Buttons.BUTTON_TRANSFER_CONSULTATIVE;
 import static com.android.incallui.CallButtonFragment.Buttons.BUTTON_UPGRADE_TO_VIDEO;
 
 import android.content.Context;
@@ -56,6 +59,8 @@ import android.widget.PopupMenu.OnMenuItemClickListener;
 
 import com.android.contacts.common.util.MaterialColorMapUtils.MaterialPalette;
 import com.android.dialer.R;
+
+import org.codeaurora.ims.utils.QtiImsExtUtils;
 
 /**
  * Fragment for call control buttons
@@ -87,7 +92,10 @@ public class CallButtonFragment
         public static final int BUTTON_MERGE = 9;
         public static final int BUTTON_PAUSE_VIDEO = 10;
         public static final int BUTTON_MANAGE_VIDEO_CONFERENCE = 11;
-        public static final int BUTTON_COUNT = 12;
+        public static final int BUTTON_TRANSFER_BLIND = 12;
+        public static final int BUTTON_TRANSFER_ASSURED = 13;
+        public static final int BUTTON_TRANSFER_CONSULTATIVE = 14;
+        public static final int BUTTON_COUNT = 15;
     }
 
     private SparseIntArray mButtonVisibilityMap = new SparseIntArray(BUTTON_COUNT);
@@ -105,6 +113,9 @@ public class CallButtonFragment
     private CompoundButton mPauseVideoButton;
     private ImageButton mOverflowButton;
     private ImageButton mManageVideoCallConferenceButton;
+    private ImageButton mBlindTransferButton;
+    private ImageButton mAssuredTransferButton;
+    private ImageButton mConsultativeTransferButton;
 
     private PopupMenu mAudioModePopup;
     private boolean mAudioModePopupVisible;
@@ -168,6 +179,12 @@ public class CallButtonFragment
         mMergeButton.setOnClickListener(this);
         mPauseVideoButton = (CompoundButton) parent.findViewById(R.id.pauseVideoButton);
         mPauseVideoButton.setOnClickListener(this);
+        mBlindTransferButton = (ImageButton) parent.findViewById(R.id.blindTransfer);
+        mBlindTransferButton.setOnClickListener(this);
+        mAssuredTransferButton = (ImageButton) parent.findViewById(R.id.assuredTransfer);
+        mAssuredTransferButton.setOnClickListener(this);
+        mConsultativeTransferButton = (ImageButton) parent.findViewById(R.id.consultativeTransfer);
+        mConsultativeTransferButton.setOnClickListener(this);
         mOverflowButton = (ImageButton) parent.findViewById(R.id.overflowButton);
         mOverflowButton.setOnClickListener(this);
         mManageVideoCallConferenceButton = (ImageButton) parent.findViewById(
@@ -224,6 +241,12 @@ public class CallButtonFragment
         } else if (id == R.id.pauseVideoButton) {
             getPresenter().pauseVideoClicked(
                     !mPauseVideoButton.isSelected() /* pause */);
+        } else if (id == R.id.blindTransfer) {
+            getPresenter().callTransferClicked(QtiImsExtUtils.QTI_IMS_BLIND_TRANSFER);
+        } else if (id == R.id.assuredTransfer) {
+            getPresenter().callTransferClicked(QtiImsExtUtils.QTI_IMS_ASSURED_TRANSFER);
+        } else if (id == R.id.consultativeTransfer) {
+            getPresenter().callTransferClicked(QtiImsExtUtils.QTI_IMS_CONSULTATIVE_TRANSFER);
         } else if (id == R.id.overflowButton) {
             if (mOverflowPopup != null) {
                 mOverflowPopup.show();
@@ -268,6 +291,9 @@ public class CallButtonFragment
                 mChangeToVoiceButton,
                 mAddCallButton,
                 mMergeButton,
+                mBlindTransferButton,
+                mAssuredTransferButton,
+                mConsultativeTransferButton,
                 mOverflowButton
         };
 
@@ -360,6 +386,9 @@ public class CallButtonFragment
         mAddCallButton.setEnabled(isEnabled);
         mMergeButton.setEnabled(isEnabled);
         mPauseVideoButton.setEnabled(isEnabled);
+        mBlindTransferButton.setEnabled(isEnabled);
+        mAssuredTransferButton.setEnabled(isEnabled);
+        mConsultativeTransferButton.setEnabled(isEnabled);
         mOverflowButton.setEnabled(isEnabled);
         mManageVideoCallConferenceButton.setEnabled(isEnabled);
     }
@@ -402,6 +431,12 @@ public class CallButtonFragment
             return mPauseVideoButton;
         } else if (id == BUTTON_MANAGE_VIDEO_CONFERENCE) {
             return mManageVideoCallConferenceButton;
+        } else if (id == BUTTON_TRANSFER_BLIND) {
+            return mBlindTransferButton;
+        } else if (id == BUTTON_TRANSFER_ASSURED) {
+            return mAssuredTransferButton;
+        } else if (id == BUTTON_TRANSFER_CONSULTATIVE) {
+            return mConsultativeTransferButton;
         } else {
             Log.w(this, "Invalid button id");
             return null;
