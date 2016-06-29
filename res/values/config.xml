@@ -37,4 +37,5 @@
 
   <!--not display SIP dial icon -->
   <bool name="config_hide_SIP_dial_icon">true</bool>
+
 </resources>
