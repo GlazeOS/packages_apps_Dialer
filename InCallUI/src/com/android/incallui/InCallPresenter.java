@@ -741,6 +741,7 @@ public class InCallPresenter implements CallList.Listener,
         if (call.isEmergencyCall()) {
             FilteredNumbersUtil.recordLastEmergencyCallTime(mContext);
         }
+        wakeUpScreen();
     }
 
     @Override
