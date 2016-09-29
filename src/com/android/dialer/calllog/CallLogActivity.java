@@ -64,7 +64,7 @@ import com.android.dialer.util.DialerUtils;
 import com.android.dialer.widget.DoubleDatePickerDialog;
 
 public class CallLogActivity extends TransactionSafeActivity implements
-        ViewPager.OnPageChangeListener, DoubleDatePickerDialog.OnDateSetListener {
+        ViewPager.OnPageChangeListener, CallLogFragment.HostInterface, DoubleDatePickerDialog.OnDateSetListener {
 
     private ViewPager mViewPager;
     private ViewPagerTabs mViewPagerTabs;
@@ -465,6 +465,18 @@ public class CallLogActivity extends TransactionSafeActivity implements
                 searchViewLayout,
                 new LayoutParams(LayoutParams.MATCH_PARENT,
                         LayoutParams.WRAP_CONTENT));
+    }
+
+    /**
+     * Implemented to satisfy {@link CallLogFragment.HostInterface}
+     */
+    @Override
+    public void showDialpad() {
+        finish();
+        if (mInSearchUi) {
+           exitSearchUi();
+        }
+        startActivity(new Intent(CallLogActivity.this, DialtactsActivity.class));
     }
 
     private void showInputMethod(View view) {
