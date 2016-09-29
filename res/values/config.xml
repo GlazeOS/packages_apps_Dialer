@@ -36,5 +36,5 @@
   <bool name="config_regional_video_call_welcome_dialog">false</bool>
 
   <!--not display SIP dial icon -->
-  <bool name="config_hide_SIP_dial_icon">false</bool>
+  <bool name="config_hide_SIP_dial_icon">true</bool>
 </resources>
