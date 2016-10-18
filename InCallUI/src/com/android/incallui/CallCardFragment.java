@@ -1696,6 +1696,11 @@ public class CallCardFragment extends BaseFragment<CallCardPresenter, CallCardPr
         }
     }
 
+    @Override
+    public void showVbButton(boolean show) {
+        mVbButton.setVisibility(show ? View.VISIBLE : View.GONE);
+    }
+
     private void showVbNotify() {
         Toast vbnotify;
         int resId = R.string.volume_boost_notify_unavailable;
